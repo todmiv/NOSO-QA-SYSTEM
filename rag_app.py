@@ -7,7 +7,7 @@ from src.retrieval import (
     retrieve_from_all_collections,
     generate_answer_with_deepseek,
 )
-from src.check_integrity import list_documents, get_document_chunks
+from src.check_integrity import list_documents
 import os
 from tqdm import tqdm
 from dotenv import load_dotenv
@@ -130,23 +130,6 @@ def analyze_chunks(query: str, selected_doc: str) -> str:
     return "\n\n".join(results)
 
 
-def get_document_chunks_for_display(selected_doc: str) -> str:
-    """Получение всех чанков документа для отображения."""
-    if not selected_doc or selected_doc == "Все документы":
-        return "Нельзя просмотреть все документы. Выберите конкретный документ."
-
-    chunks = get_document_chunks(selected_doc)
-    if not chunks:
-        return "Документ не найден."
-
-    content = []
-    for chunk in chunks:
-        content.append(
-            f"Чанк: {chunk['id']}\nТекст: {chunk['text']}\nМетаданные: {chunk['metadata']}\n---"
-        )
-    return "\n".join(content)
-
-
 def get_available_documents() -> list:
     """Получение списка доступных документов."""
     docs = list_documents()
@@ -224,11 +207,6 @@ with gr.Blocks(title="Q&A по документам СРО НОСО") as app:
             analyze_chunks, inputs=[analyze_query, doc_dropdown], outputs=analyze_tab_output
         )
 
-    with gr.Tab("Просмотр документа"):
-        view_output = gr.Textbox(label="Содержимое документа", lines=20)
-        view_button = gr.Button("Просмотреть")
-        view_button.click(get_document_chunks_for_display, inputs=doc_dropdown, outputs=view_output)
-
 if __name__ == "__main__":
     initialize_system()
-    app.launch(pwa=True)
+    app.launch()
