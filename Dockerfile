@@ -17,4 +17,9 @@ COPY . .
 # Create dirs
 RUN mkdir -p data/chroma_db
 
+# Initialize database
+RUN /bin/sh -c "ollama serve & sleep 10 && python init_db.py"
+
+CMD ["python", "rag_app.py"]
+
 CMD ["python", "rag_app.py"]
