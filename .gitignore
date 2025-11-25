@@ -182,9 +182,6 @@ Thumbs.db
 .DS_Store
 
 # Project specific
-# ChromaDB database
-data/chroma_db/
-
 # Progress files
 progress_metadata_hierarchical.json
 
